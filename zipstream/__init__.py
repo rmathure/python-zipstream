@@ -324,7 +324,8 @@ class ZipFile(zipfile.ZipFile):
             zinfo.compress_size = file_size
         zinfo.CRC = CRC
         zinfo.file_size = file_size
-        if not zip64 and self._allowZip64:
+        # Run these checks if not running in streaming mode i.e. filename is provided
+        if not zip64 and self._allowZip64 and filename:
             if file_size > ZIP64_LIMIT:
                 raise RuntimeError('File size has increased during compressing')
             if compress_size > ZIP64_LIMIT:
